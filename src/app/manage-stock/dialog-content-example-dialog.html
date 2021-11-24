@@ -1,0 +1,24 @@
+<mat-dialog-content class="mat-typography">
+            <mat-form-field appearance="fill" required>
+            <mat-label>Input</mat-label>
+            <input matInput>
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill" required>
+            <mat-label>Select</mat-label>
+            <mat-select>
+              <mat-option value="one">First option</mat-option>
+              <mat-option value="two">Second option</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill" required>
+            <mat-label>Textarea</mat-label>
+            <textarea matInput></textarea>
+          </mat-form-field>
+          <br>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" mat-dialog-close>Save</button>
+  <button mat-raised-button color="warn" [mat-dialog-close]="true" cdkFocusInitial>Delete</button>
+</mat-dialog-actions>

@@ -1,0 +1,12 @@
+<p>
+    <mat-toolbar color="primary">
+      <span>View Inventory</span>
+    </mat-toolbar>
+  </p>
+<mat-list  class="grid_menu">
+    <h1 mat-subheader>Items</h1>
+    <mat-list-item *ngFor="let folder of folders">
+        <mat-icon mat-list-icon>folder</mat-icon>
+      <p mat-line><span>{{folder.name}}</span> 12</p>
+      
+    </mat-list-item>
