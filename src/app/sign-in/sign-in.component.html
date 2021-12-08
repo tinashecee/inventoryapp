@@ -1,0 +1,61 @@
+
+        <form class="example-form" >
+
+          <img src="../../assets/pics/login.png" alt="icon" style="padding-left: 25%;padding-bottom: 10%;">
+
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Email</mat-label>
+            <input type="email"  matInput class="formControl" placeholder="Username" #userName required>
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Password</mat-label>
+            <input type="password"  matInput class="formControl" placeholder="Password" #userPassword required>
+        </mat-form-field>
+            <button mat-raised-button color="primary" class="example-full-width" (click)="authService.SignIn(userName.value, userPassword.value)">SIGN IN</button>
+            <span routerLink="/forgot-password">Forgot Password?</span>
+            <span>Don't have an account?<a class="redirect" routerLink="/sign-up"> Sign Up</a></span>
+        </form>
+            
+
+
+  <!----
+<div class="displayTable">
+    <div class="displayTableCell">
+  
+      <div class="authBlock">
+        <h3>Sign In</h3>
+        <div class="formGroup">
+          <input type="text" class="formControl" placeholder="Username" #userName required>
+        </div>
+  
+        <div class="formGroup">
+          <input type="password" class="formControl" placeholder="Password" #userPassword required>
+        </div>
+  
+        <div class="formGroup">
+          <input type="button" class="btn btnPrimary" value="Log in" (click)="authService.SignIn(userName.value, userPassword.value)">
+        </div>
+  
+        <div class="formGroup">
+          <span class="or"><span class="orInner">Or</span></span>
+        </div>
+  
+        <div class="formGroup">
+          <button type="button" class="btn googleBtn" (click)="authService.GoogleAuth()">
+            <i class="fab fa-google-plus-g"></i>
+            Log in with Google
+          </button>
+        </div>
+  
+        <div class="forgotPassword">
+          <span routerLink="/forgot-password">Forgot Password?</span>
+        </div>
+      </div>
+  
+      <div class="redirectToLogin">
+        <span>Don't have an account?<span class="redirect" routerLink="/register-user"> Sign Up</span></span>
+      </div>
+  
+    </div>
+  </div>
+-->

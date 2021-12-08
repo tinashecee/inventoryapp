@@ -3,10 +3,15 @@
       <span>View Inventory</span>
     </mat-toolbar>
   </p>
-<mat-list  class="grid_menu">
-    <h1 mat-subheader>Items</h1>
-    <mat-list-item *ngFor="let folder of folders">
-        <mat-icon mat-list-icon>folder</mat-icon>
-      <p mat-line><span>{{folder.name}}</span> 12</p>
+    <mat-action-list>
       
-    </mat-list-item>
+      <button mat-list-item><mat-icon mat-list-icon>folder</mat-icon><p mat-line><span>All Items</span> </p></button>
+    
+  </mat-action-list>
+  <mat-action-list>
+    <button mat-list-item  *ngFor="let folder of categories">
+        <mat-icon mat-list-icon>folder</mat-icon>
+      <p mat-line><span>{{folder.name}}</span></p>
+      
+    </button>
+  </mat-action-list>

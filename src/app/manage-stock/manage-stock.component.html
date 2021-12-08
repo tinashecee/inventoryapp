@@ -1,24 +1,49 @@
+<p>
+  <mat-toolbar color="primary">
+    <span>Manage Inventory</span>
+  </mat-toolbar>
+</p>
 <mat-tab-group mat-align-tabs="center">
     <mat-tab label="Add Items">
         <mat-stepper orientation="vertical" [linear]="isLinear" class="center-input" #stepper>
-            <mat-step [stepControl]="firstFormGroup">
+            <mat-step [stepControl]="firstFormGroup" optional>
                 <form [formGroup]="firstFormGroup">
                   <ng-template matStepLabel>Enter Item Name</ng-template>
                   <mat-form-field appearance="fill">
                     <mat-label>Item Name</mat-label>
-                  <input matInput placeholder="Item Name" formControlName="firstCtrl" required>
+                  <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" required>
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                        {{option.name}}
+                      </mat-option>
+                    </mat-autocomplete>
                   </mat-form-field>
                   <div>
                     <button mat-button matStepperNext>Next</button>
                   </div>
+
+                  
                 </form>
               </mat-step>
-            <mat-step [stepControl]="secondFormGroup">
-              <form [formGroup]="secondFormGroup">
+              <mat-step [stepControl]="secondFormGroup" optional>
+                <form [formGroup]="secondFormGroup">
+                  <ng-template matStepLabel>Enter Item Serial Number</ng-template>
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Serial Number</mat-label>
+                    <input matInput placeholder="Enter Item Serial #" formControlName="secondCtrl" required>
+                  </mat-form-field>
+                  <div>
+                      <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                  </div>
+                </form>
+              </mat-step>  
+            <mat-step [stepControl]="thirdFormGroup" >
+              <form [formGroup]="thirdFormGroup">
                 <ng-template matStepLabel>Enter Item Description</ng-template>
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Description</mat-label>
-                  <textarea matInput placeholder="Enter Item Description" formControlName="secondCtrl" required></textarea>
+                  <textarea matInput placeholder="Enter Item Description" formControlName="thirdCtrl" required></textarea>
                 </mat-form-field>
                 <div>
                     <button mat-button matStepperPrevious>Back</button>
@@ -26,12 +51,28 @@
                 </div>
               </form>
             </mat-step>
-            <mat-step [stepControl]="thirdFormGroup">
-              <form [formGroup]="thirdFormGroup">
+            <mat-step [stepControl]="fourthFormGroup" optional>
+              <form [formGroup]="fourthFormGroup">
+                <ng-template matStepLabel>Enter Item Expiration</ng-template>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-label>Expiration Date</mat-label>
+                  <input matInput [matDatepicker]="picker"  formControlName="fourthCtrl">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                  <button mat-button matStepperNext>Next</button>
+                </div>
+              </form>
+            </mat-step>
+            <mat-step [stepControl]="fifthFormGroup">
+              <form [formGroup]="fifthFormGroup">
                 <ng-template matStepLabel>Enter Item Quantity</ng-template>
                 <mat-form-field appearance="fill">
                   <mat-label>Quantity</mat-label>
-                  <input matInput type="number" formControlName="thirdCtrl" placeholder="1"
+                  <input matInput type="number" formControlName="fifthCtrl" placeholder="1"
                          required>
                 </mat-form-field>
                 <div>
@@ -45,13 +86,22 @@
               <p>You are now done.</p>
               <div>
                 <button mat-button matStepperPrevious>Back</button>
-                <button mat-button (click)="stepper.reset()">Reset</button>
+                <button mat-raised-button color="primary" [disabled]="isDisabled()" (click)="addItem();stepper.reset()">Submit</button>
+                <button mat-button color="warn" (click)="stepper.reset()">Reset</button>
               </div>
             </mat-step>
           </mat-stepper>
         
     </mat-tab>
-    <mat-tab label="Edit Item Quantity">Content 2</mat-tab>
+    <mat-tab label="Edit Items">
+      <mat-action-list>
+        <button mat-list-item *ngFor="let n of items"  (click)="openDialog1(n.id,n.item_name,n.item_description,n.item_quantity)">
+              <mat-chip-list><mat-chip>{{n.item_quantity}}</mat-chip></mat-chip-list>
+            <p mat-line><span>{{n.item_description}}</span><span>{{n.item_serial_number}}</span> <mat-chip-list><mat-chip color="primary">{{n.item_name}}</mat-chip></mat-chip-list></p>
+            
+          </button>
+      </mat-action-list>
+    </mat-tab>
     <mat-tab label="Manage Item Categories">
         <mat-tab-group mat-align-tabs="center">
             <mat-tab label="Add Category"><mat-stepper orientation="vertical" [linear]="isLinear" class="center-input" #stepper1>
@@ -60,7 +110,7 @@
                       <ng-template matStepLabel>Enter Category Name</ng-template>
                       <mat-form-field appearance="fill">
                         <mat-label>Category Name</mat-label>
-                      <input matInput placeholder="Item Name" formControlName="firstCtrl1" required>
+                      <input matInput placeholder="Item Name" name="name1" formControlName="firstCtrl1" required>
                       </mat-form-field>
                       <div>
                         <button mat-button matStepperNext>Next</button>
@@ -68,11 +118,11 @@
                     </form>
                   </mat-step>
                 <mat-step [stepControl]="secondFormGroup1">
-                  <form [formGroup]="secondFormGroup1">
-                    <ng-template matStepLabel>Enter Item Description</ng-template>
+                  <form [formGroup]="secondFormGroup1" optional>
+                    <ng-template matStepLabel>Enter Category Description</ng-template>
                     <mat-form-field class="example-full-width" appearance="fill">
                       <mat-label>Description</mat-label>
-                      <textarea matInput placeholder="Enter Item Description" formControlName="secondCtrl1" required></textarea>
+                      <textarea matInput placeholder="Enter Item Description"  name="desc1" formControlName="secondCtrl1" required></textarea>
                     </mat-form-field>
                     <div>
                         <button mat-button matStepperPrevious>Back</button>
@@ -85,7 +135,7 @@
                     <ng-template matStepLabel>Enter Category Type</ng-template>
                       <mat-form-field appearance="fill">
                         <mat-label>Category Type</mat-label>
-                        <mat-select [(ngModel)]="selectedValue" name="type" formControlName="thirdCtrl1" required>
+                        <mat-select [(ngModel)]="selectedValue" name="type1" formControlName="thirdCtrl1" required>
                           <mat-option *ngFor="let type of categoryType" [value]="type.value">
                             {{type.viewValue}}
                           </mat-option>
@@ -102,13 +152,14 @@
                   <p>You are now done.</p>
                   <div>
                     <button mat-button matStepperPrevious>Back</button>
-                    <button mat-button (click)="stepper1.reset()">Reset</button>
+                    <button mat-raised-button color="primary" (click)="createCategory();stepper1.reset()">Submit</button>
+                    <button mat-button color="warn" (click)="stepper1.reset()">Reset</button>
                   </div>
                 </mat-step>
               </mat-stepper></mat-tab>
             <mat-tab label="Edit Category">
               <mat-action-list>
-                <button mat-list-item *ngFor="let shoe of typesOfShoes" [value]="shoe" (click)="openDialog()"> {{shoe}} </button>
+                <button mat-list-item *ngFor="let name of options" [value]="name" (click)="openDialog(name.name)"> {{name.name}} </button>
               </mat-action-list>
             </mat-tab>
           </mat-tab-group>

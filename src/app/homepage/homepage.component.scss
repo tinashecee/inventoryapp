@@ -1,7 +1,12 @@
+table {
+  width: 100%;
+}
 
-  mat-grid-tile {
-    background-color: whitesmoke;
-    border-radius: 1.4%;
-  }
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
 
- 
+td, th {
+  width: 25%;
+}

@@ -14,7 +14,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import { ViewInventoryComponent } from './view-inventory/view-inventory.component';
 import { AddItemComponent } from './add-item/add-item.component';
 import { RemoveItemComponent } from './remove-item/remove-item.component';
-import { RecordComponent } from './record/record.component';
+import { BottomSheetOverviewExampleSheet, RecordComponent } from './record/record.component';
 import { ReportComponent } from './report/report.component';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -25,10 +25,28 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { DisplayComponent } from './display/display.component';
-
-import { DialogContentExampleDialog } from './manage-stock/manage-stock.component'; 
+import { environment } from "src/environments/environment";
+import { AngularFireModule} from '@angular/fire'
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from "@angular/fire/auth";
+import {MatChipsModule} from '@angular/material/chips';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS} from '@angular/material/snack-bar';
+import { DialogContentExampleDialog, EditItemDialog } from './manage-stock/manage-stock.component'; 
 import { ManageStockComponent } from './manage-stock/manage-stock.component';
+import { ListItemsComponent } from './list-items/list-items.component';
+import { AllocationsComponent } from './allocations/allocations.component';
+import { AuthService } from './services/auth.service';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import {MatDividerModule} from '@angular/material/divider';
+import { SignUpComponent } from './sign-up/sign-up.component';
+import { SignInComponent } from './sign-in/sign-in.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +58,15 @@ import { ManageStockComponent } from './manage-stock/manage-stock.component';
     ReportComponent,
     DisplayComponent,
     ManageStockComponent,
-    DialogContentExampleDialog
+    DialogContentExampleDialog,
+    EditItemDialog,
+    ListItemsComponent,
+    BottomSheetOverviewExampleSheet,
+    AllocationsComponent,
+    DashboardComponent,
+    SignUpComponent,
+    SignInComponent,
+    VerifyEmailComponent
   ],
   imports: [
     BrowserModule,
@@ -61,10 +87,29 @@ import { ManageStockComponent } from './manage-stock/manage-stock.component';
     MatCardModule,
     MatTabsModule,
     MatDialogModule,
+    MatChipsModule,
+    MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule ,
+    MatPaginatorModule,
+    AngularFireModule.initializeApp({
+      apiKey: "AIzaSyCM8D_fEU_T8ieaXLEjFtknvcYxkweSM-o",
+      authDomain: "itmlgpw-inventory.firebaseapp.com",
+      projectId: "itmlgpw-inventory",
+      storageBucket: "itmlgpw-inventory.appspot.com",
+      messagingSenderId: "626175535227",
+      appId: "1:626175535227:web:aed1fcb9a9fbb694b29ade",
+      measurementId: "G-072ZGDW7F9"
+    }),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
     MatBottomSheetModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatAutocompleteModule,
+    MatSnackBarModule,
+    MatDividerModule
   ],
-  providers: [],
+  providers: [{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3500}},AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
