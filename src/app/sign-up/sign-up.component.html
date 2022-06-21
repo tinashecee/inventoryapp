@@ -1,33 +1,38 @@
- <form class="example-form" [formGroup]="requiredForm" novalidate>
+<form class="example-form" [formGroup]="myForm" >
   <img src="../../assets/pics/login.png" alt="icon" style="padding-left: 25%;padding-bottom: 10%;">
   <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Username</mat-label>
             <input type="text" matInput placeholder="User" #userUsername formControlName="name" required>
+            <mat-error *ngIf="myForm?.hasError('required' ,'name')">
+              Please enter your Username
+            </mat-error>
           </mat-form-field>
-          <div *ngIf="requiredForm.controls['name'].invalid && requiredForm.controls['name'].touched" class="alert alert-danger">
-            <div *ngIf="requiredForm.controls['name'].errors?.required">
-            Username is required.
-          </div>
-        </div>
+          
             <mat-form-field class="example-full-width" appearance="fill">
               <mat-label>Email</mat-label>
               <input type="email" matInput placeholder="email" #userEmail formControlName="email" required>
+              <mat-error *ngIf="myForm?.hasError('required', 'email')">
+                Please enter your Email
+              </mat-error>
             </mat-form-field>
-            <div *ngIf="requiredForm.controls['email'].invalid && requiredForm.controls['email'].touched" class="alert alert-danger">
-              <div *ngIf="requiredForm.controls['email'].errors?.required">
-             Email is required.
-             </div>
-          </div>
+            
             <mat-form-field class="example-full-width" appearance="fill" required>
                 <mat-label>Password</mat-label>
                 <input type="password" matInput placeholder="******" formControlName="password" #userPwd>
+              <mat-error *ngIf="myForm?.hasError('required', 'password')">
+                Please enter your Password
+              </mat-error>
               </mat-form-field>
-              <div *ngIf="requiredForm.controls['name'].invalid && requiredForm.controls['name'].touched" class="alert alert-danger">
-                <div *ngIf="requiredForm.controls['name'].errors?.required">
-                Name is required.
-              </div>
-            </div>
-              <button mat-raised-button color="primary" class="example-full-width" (click)="authService.SignUp(userEmail.value, userPwd.value)">SIGN-UP</button>
+
+            <mat-form-field class="example-full-width" appearance="fill" required>
+              <mat-label> Confirm Password</mat-label>
+              <input type="password" matInput placeholder="******" formControlName="confirmPassword" #userPwd   [errorStateMatcher]="matcher">
+              <mat-error *ngIf="myForm?.hasError('notSame')">
+                Passwords do not match
+              </mat-error> 
+            </mat-form-field>
+             
+              <button mat-raised-button [disabled]="!myForm.valid" color="primary" class="example-full-width" (click)="authService.SignUp(userEmail.value, userPwd.value)">SIGN-UP</button>
               <span>Already have an account? <a class="redirect" routerLink="/sign-in">Log In</a></span>
  </form>
     

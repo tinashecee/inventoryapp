@@ -20,12 +20,22 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class SignUpComponent implements OnInit {
   //Create FormGroup
   //Create FormGroup
-  requiredForm!: FormGroup;
+  //requiredForm!: FormGroup;
+  myForm: FormGroup;
+  matcher = new MyErrorStateMatcher();
 
   constructor(public authService: AuthService, private fb: FormBuilder) {
-      this.myForm();
+      //this.myForm();
+      this.myForm = this.fb.group({
+        name: ['', Validators.required ],
+        email: ['', [Validators.required, 
+          Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")] ],
+        password: ['', [Validators.required]],
+        confirmPassword: ['']
+      }, { validator: this.checkPasswords });
      }
-  //Create required field validator for name
+     
+    /*
   myForm() {
     this.requiredForm = this.fb.group({
     name: ['', Validators.required ],
@@ -38,7 +48,7 @@ export class SignUpComponent implements OnInit {
          confirmPassword: ['']
     }, { validator: this.checkPasswords
     });
- }
+ }*/
  checkPasswords: ValidatorFn = (group: AbstractControl):  ValidationErrors | null => { 
   let pass = group.get('password')?.value;
   let confirmPass = group.get('confirmPassword')?.value
