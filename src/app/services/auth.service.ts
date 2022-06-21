@@ -5,6 +5,7 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
 import { BehaviorSubject } from 'rxjs';
+import { InventoryService } from './inventory.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +17,11 @@ export class AuthService {
   userEmail1 = this.userEmail.asObservable();
 
   constructor(
-    public afs: AngularFirestore,   // Inject Firestore service
-    public afAuth: AngularFireAuth, // Inject Firebase auth service
-    public router: Router,
-    public ngZone: NgZone // NgZone service to remove outside scope warning
+    private afs: AngularFirestore,   // Inject Firestore service
+    private afAuth: AngularFireAuth, // Inject Firebase auth service
+    private router: Router,
+    private ngZone: NgZone, // NgZone service to remove outside scope warning,
+    private inventoryService: InventoryService
   ) {
     /* Saving user data in localstorage when
     logged in and setting up null when logged out */
@@ -52,7 +54,7 @@ export class AuthService {
         this.userEmail.next(result.user?.email+'');
       }).catch((error) => {
         window.alert(error.message)
-      })
+      }) 
   }
 
   // Sign up with email/password
@@ -119,12 +121,15 @@ export class AuthService {
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
   SetUserData(user:any) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    let date: Date = new Date(); 
     const userData: User = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
-      emailVerified: user.emailVerified
+      emailVerified: user.emailVerified,
+      permissions: 'restricted',
+      createdAt: date 
     }
     return userRef.set(userData, {
       merge: true

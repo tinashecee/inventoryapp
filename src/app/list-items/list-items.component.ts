@@ -5,7 +5,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {ActivatedRoute} from "@angular/router";
 import { Item } from '../models/item';
 import { InventoryService } from '../services/inventory.service';
-
+import * as html2pdf from 'html2pdf.js'
 
 @Component({
   selector: 'app-list-items',
@@ -59,6 +59,19 @@ export class ListItemsComponent implements  AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+  download(){
+    var element = document.getElementById('table');
+var opt = {
+  margin:       1,
+  filename:     'download.pdf',
+  image:        { type: 'jpeg', quality: 0.98 },
+  html2canvas:  { scale: 2 },
+  jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+};
+ 
+// New Promise-based usage:
+html2pdf().from(element).set(opt).save();
   }
 }
 

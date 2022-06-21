@@ -23,6 +23,7 @@
                     <p>User ID: <strong>{{user.uid}}</strong></p>
                     <p>Email: <strong>{{user.email}}</strong></p>
                     <p>Email Verified: <strong>{{user.emailVerified}}</strong></p>
+                    <p>Permissions: <strong>{{user.permissions}}</strong></p>
                   </div>
                 </div>
               </div>
@@ -36,7 +37,7 @@
   </mat-grid-tile>
     <mat-grid-tile colspan="2">
  
-        <mat-toolbar color="accent" style="position: absolute;top: 0;">
+        <mat-toolbar color="primary" style="position: absolute;top: 0;">
           <span><h1>Total Items</h1></span>
         </mat-toolbar>
     
@@ -48,10 +49,10 @@
     </div>
     </mat-grid-tile> 
     <mat-grid-tile rowHeight="500"  style="overflow-y: scroll;">
-      <mat-toolbar color="accent" style="position: absolute;top: 0;">
+      <mat-toolbar color="primary" style="position: absolute;top: 0;">
         <span><h1>Item Quantity</h1></span>
       </mat-toolbar>
-      <mat-list style="width:100%;padding-top:50px">
+      <mat-list style="width:100%;padding-top:100px">
         <mat-list-item *ngFor="let m of data1">
           <mat-chip-list><span></span>
           <mat-chip color="primary" *ngIf="m.percentage > 0" selected>{{m.percentage}}</mat-chip><mat-chip *ngIf="m.percentage === 0" >{{m.percentage}}</mat-chip></mat-chip-list>
@@ -61,7 +62,7 @@
       </mat-list>
     </mat-grid-tile>
     <mat-grid-tile>
-       <mat-toolbar color="accent" style="position: absolute;top: 0;">
+       <mat-toolbar color="primary" style="position: absolute;top: 0;">
       <span><h1>Items Distributed</h1></span>
       
     </mat-toolbar>

@@ -68,6 +68,12 @@ export class InventoryService {
 }
 addItem(data:any,nam:string) {
   return new Promise<any>((resolve, reject) =>{
+      /*this.items2.subscribe(res=>{
+        let arry:Item[]=res
+        arry.forEach(element => {
+          if(d)
+        });
+      })*/
       this.firestore
           .collection("it_inventory")
           .add(data)

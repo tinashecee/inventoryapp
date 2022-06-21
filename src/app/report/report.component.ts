@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Allocation } from '../models/allocation';
 import { Record } from '../models/record';
 import { InventoryService } from '../services/inventory.service';
+import * as html2pdf from 'html2pdf.js'
 
 @Component({
   selector: 'app-report',
@@ -48,6 +49,19 @@ export class ReportComponent implements OnInit,AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+  download(){
+    var element = document.getElementById('table');
+var opt = {
+  margin:       1,
+  filename:     'download.pdf',
+  image:        { type: 'jpeg', quality: 0.98 },
+  html2canvas:  { scale: 2 },
+  jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+};
+ 
+// New Promise-based usage:
+html2pdf().from(element).set(opt).save();
   }
 
 }
