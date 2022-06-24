@@ -47,6 +47,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { AuthGuard } from './guard/auth.guard';
 @NgModule({
   declarations: [
     AppComponent,
@@ -109,7 +110,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSnackBarModule,
     MatDividerModule
   ],
-  providers: [{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3500}},AuthService],
+  providers: [{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3500}},AuthService,AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

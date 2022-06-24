@@ -15,6 +15,7 @@ export class AuthService {
   userData: any; // Save logged in user data
   public userEmail= new BehaviorSubject<string>("");
   userEmail1 = this.userEmail.asObservable();
+  emailVeried=false;
 
   constructor(
     private afs: AngularFirestore,   // Inject Firestore service
@@ -30,11 +31,32 @@ export class AuthService {
  async getUser(){
   await this.afAuth.authState.subscribe(user => {
     if (user) {
-      this.userData = user;
+      const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+      const album = userRef.valueChanges();
+      let name: any,permissions: any,e;
+      this.emailVeried=user.emailVerified;
+      console.log( this.emailVeried)
+      album.subscribe(value => {
+        name = value.usersName;
+        permissions = value.permissions;
+        e = value.email;
+        
+      const userData: User = {
+        uid: user.uid,
+        email: user.email+'',
+        displayName: user.displayName+'',
+        photoURL: user.photoURL+'',
+        emailVerified: user.emailVerified,
+        permissions: permissions,
+        usersName:name
+      }
+      this.userData = userData;
       localStorage.setItem('user', JSON.stringify(this.userData));
       let a:any
       a = localStorage.getItem('user')
       JSON.parse(a);
+    })
+      
     } else {
       localStorage.setItem('user', null || '{}');
       let a:any
@@ -58,13 +80,13 @@ export class AuthService {
   }
 
   // Sign up with email/password
-  SignUp(email:any, password:any) {
+  SignUp(username:any, email:any, password:any) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign
         up and returns promise */
         this.SendVerificationMail();
-        this.SetUserData(result.user);
+        this.SetUserData1(result.user,username);
       }).catch((error) => {
         window.alert(error.message)
       })
@@ -95,7 +117,9 @@ export class AuthService {
     let f:any
     f=localStorage.getItem('user')
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return (user !== null && user.emailVerified !== false) ? true : false;
+   // return (user !== null && user.emailVerified !== false) ? true : false;
+   console.log(this.emailVeried)
+   return (this.emailVeried === true) ? true : false;
   }
 
   // Sign in with Google
@@ -120,6 +144,31 @@ export class AuthService {
   sign up with username/password and sign in with social auth
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
   SetUserData(user:any) {
+    let date: Date = new Date(); 
+    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    const album = userRef.valueChanges();
+    let name: any,permissions: any,e;
+    album.subscribe(value => {
+      name = value.usersName;
+      permissions = value.permissions;
+      e = value.email;
+    const userData: User = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      emailVerified: user.emailVerified,
+      permissions: permissions,
+      usersName:name
+    }
+    this.userData=userData
+    return userRef.set(userData, {
+      merge: true
+    })
+    });
+    
+  }
+  SetUserData1(user:any,name:string) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     let date: Date = new Date(); 
     const userData: User = {
@@ -128,8 +177,9 @@ export class AuthService {
       displayName: user.displayName,
       photoURL: user.photoURL,
       emailVerified: user.emailVerified,
-      permissions: 'restricted',
-      createdAt: date 
+      permissions: "restricted",
+      createdAt: date,
+      usersName:name
     }
     return userRef.set(userData, {
       merge: true
@@ -140,6 +190,8 @@ export class AuthService {
   SignOut() {
     return this.afAuth.auth.signOut().then(() => {
       localStorage.removeItem('user');
+      this.userData=null
+      this.emailVeried = false
       this.router.navigate(['sign-in']);
     })
   }

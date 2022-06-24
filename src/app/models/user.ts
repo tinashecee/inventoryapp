@@ -4,6 +4,7 @@ export interface User {
     displayName: string;
     photoURL?: string;
     emailVerified: boolean;
-    permissions: string;
-    createdAt: Date
+    permissions?: string;
+    createdAt?: Date;
+    usersName?:string;
  }

@@ -27,7 +27,6 @@ export class HomepageComponent implements OnInit,AfterViewInit {
     //this.route.params.subscribe( params => console.log(params) );
     this.inventoryService.getSubjectReport().subscribe(res=>{
       this.operations=res;
-      console.log(this.operations)
       this.dataSource = new MatTableDataSource(this.operations);
     }) 
    

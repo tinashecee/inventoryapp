@@ -7,21 +7,28 @@
         <div class="formGroup" *ngIf="authService.userData as user">
           <p class="text-center">We have sent a confirmation email to <strong>{{user.email}}</strong>.</p>
           <p class="text-center">Please check your email and click on the link to verfiy your email address.</p>
+           <!-- Calling SendVerificationMail() method using authService Api -->
+        
+          
+  
+      </div>
+      <div class="redirectToLogin" style="text-align:center">
+      <button mat-raised-button  color="warn" (click)="authService.SendVerificationMail()">
+        <i class="fas fa-redo-alt"></i>
+        Resend Verification Email
+      </button>
+      <br/>
+      <br/>
+      <br/>
+      Go back to?
+      </div>
+  
+      <div class="redirectToLogin" style="text-align:center">
+       <button mat-raised-button color="primary" class="redirect" routerLink="/sign-in"> Sign in</button>
+      </div>
         </div>
         
-        <!-- Calling SendVerificationMail() method using authService Api -->
-        <div class="formGroup">
-          <button type="button" class="btn btnPrimary" (click)="authService.SendVerificationMail()">
-            <i class="fas fa-redo-alt"></i>
-            Resend Verification Email
-          </button>
-        </div>
-  
-      </div>
-  
-      <div class="redirectToLogin">
-        <span>Go back to?<span class="redirect" routerLink="/sign-in"> Sign in</span></span>
-      </div>
+       
   
     </div>
   </div>

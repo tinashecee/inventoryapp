@@ -19,7 +19,7 @@
               <div class="col-md-12">
                 <div class="media">
                   <div class="media-body">
-                    <h1>Hello: <strong>{{(user.displayName) ? user.displayName : 'User'}}</strong></h1>
+                    <h1>User: <strong>{{(user.usersName) ? user.usersName : 'User'}}</strong></h1>
                     <p>User ID: <strong>{{user.uid}}</strong></p>
                     <p>Email: <strong>{{user.email}}</strong></p>
                     <p>Email Verified: <strong>{{user.emailVerified}}</strong></p>
@@ -73,9 +73,11 @@
      
   </div>
   </mat-grid-tile>
-  <mat-grid-tile ><button color="primary" routerLink="/record" mat-raised-button>Record Allocation <mat-icon>note_add</mat-icon></button></mat-grid-tile>
+  <div *ngIf="authService.userData as user">
+  <mat-grid-tile ><button [disabled]="user.permissions !== 'unlimited'" color="primary" routerLink="/record" mat-raised-button>Record Allocation <mat-icon>note_add</mat-icon></button></mat-grid-tile>
   <mat-grid-tile ><button color="primary" routerLink="/list-items" mat-raised-button>View Inventory <mat-icon>description</mat-icon></button></mat-grid-tile>
-  <mat-grid-tile ><button color="primary" routerLink="/manage-stock" mat-raised-button>Manage Inventory<mat-icon>add_box</mat-icon></button></mat-grid-tile>
+  <mat-grid-tile ><button [disabled]="user.permissions !== 'limited' && user.permissions !== 'unlimited'" color="primary" routerLink="/manage-stock" mat-raised-button>Manage Inventory<mat-icon>add_box</mat-icon></button></mat-grid-tile>
   <mat-grid-tile ><button color="primary" routerLink="/allocations" mat-raised-button>View Item Allocations<mat-icon>person</mat-icon></button></mat-grid-tile>
   <mat-grid-tile ><button color="primary" routerLink="/report" mat-raised-button>View Reports<mat-icon>assignment</mat-icon></button></mat-grid-tile>
-  </mat-grid-list>
+</div>
+</mat-grid-list>
