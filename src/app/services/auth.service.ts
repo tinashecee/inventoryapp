@@ -35,7 +35,6 @@ export class AuthService {
       const album = userRef.valueChanges();
       let name: any,permissions: any,e;
       this.emailVeried=user.emailVerified;
-      console.log( this.emailVeried)
       album.subscribe(value => {
         name = value.usersName;
         permissions = value.permissions;
@@ -118,7 +117,6 @@ export class AuthService {
     f=localStorage.getItem('user')
     const user = JSON.parse(localStorage.getItem('user') || '{}');
    // return (user !== null && user.emailVerified !== false) ? true : false;
-   console.log(this.emailVeried)
    return (this.emailVeried === true) ? true : false;
   }
 
