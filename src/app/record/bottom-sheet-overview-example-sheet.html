@@ -4,7 +4,7 @@
         <ng-template matStepLabel>Recepient's Name</ng-template>
         <mat-form-field appearance="fill">
           <mat-label>Full Name</mat-label>
-          <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+          <input matInput placeholder="e.g. Phiri Ray" formControlName="firstCtrl" required>
         </mat-form-field>
         <div>
           <button mat-button matStepperNext>Next</button>
@@ -15,8 +15,8 @@
         <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Recepient's Province</ng-template>
           <mat-form-field appearance="fill">
-            <mat-label>ID #</mat-label>
-            <input matInput placeholder="Midlands" formControlName="secondCtrl" required>
+            <mat-label>Province</mat-label>
+            <input matInput placeholder="e.g. Midlands" formControlName="secondCtrl" required>
           </mat-form-field>
           <div>
             <button mat-button matStepperPrevious>Back</button>
@@ -28,8 +28,8 @@
       <form [formGroup]="thirdFormGroup">
         <ng-template matStepLabel>Recepient's Office</ng-template>
         <mat-form-field appearance="fill">
-          <mat-label>Address</mat-label>
-          <input matInput formControlName="thirdCtrl" placeholder="Ex. 1 Main St, New York, NY"
+          <mat-label>Office No</mat-label>
+          <input matInput formControlName="thirdCtrl" placeholder="e.g. 304"
                  required>
         </mat-form-field>
         <div>
@@ -43,7 +43,7 @@
               <ng-template matStepLabel>Recepient's Department</ng-template>
               <mat-form-field appearance="fill">
                 <mat-label>Department</mat-label>
-                <input matInput formControlName="fourthCtrl" placeholder="HR, Civil.."
+                <input matInput formControlName="fourthCtrl" placeholder="e.g. Human Resources"
                        required>
               </mat-form-field>
               <div>
@@ -57,7 +57,7 @@
                   <ng-template matStepLabel>Recepient's Position</ng-template>
                   <mat-form-field appearance="fill">
                     <mat-label>Position</mat-label>
-                    <input matInput formControlName="fifthCtrl" placeholder="Officer"
+                    <input matInput formControlName="fifthCtrl" placeholder="e.g. Officer"
                            required>
                   </mat-form-field>      
         <div>

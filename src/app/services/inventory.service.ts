@@ -110,12 +110,16 @@ allocateDevice(id:string,data:any,nam:string) {
       this.firestore
           .collection("allocations")
           .add(data)
-          .then(res => {let date: Date = new Date(); 
+          .then(res => {
+            this.dialog.closeAll();
+            let date: Date = new Date(); 
             this.firestore.doc<Item>(`it_inventory/${id}`).update({
               status:"alloted",
               updatedAt:''+date
-          }).then(res=>{
-            this.dialog.closeAll();
+          }
+          
+          ).then(res=>{
+            
             this.makeAreport('allot item',nam)
             this.openSnackBar("Device Allocation was successful","Cancel")}) .catch(err => {this.openSnackBar("Error Occured","Cancel")});
             })
