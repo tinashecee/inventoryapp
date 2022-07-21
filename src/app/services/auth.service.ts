@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Component, Injectable, NgZone } from '@angular/core';
 import { User } from "../models/user";
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
@@ -6,6 +6,8 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { Router } from "@angular/router";
 import { BehaviorSubject } from 'rxjs';
 import { InventoryService } from './inventory.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatDialog} from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +18,16 @@ export class AuthService {
   public userEmail= new BehaviorSubject<string>("");
   userEmail1 = this.userEmail.asObservable();
   emailVeried=false;
+  isUser = false;
 
   constructor(
     private afs: AngularFirestore,   // Inject Firestore service
     private afAuth: AngularFireAuth, // Inject Firebase auth service
     private router: Router,
     private ngZone: NgZone, // NgZone service to remove outside scope warning,
-    private inventoryService: InventoryService
+    private inventoryService: InventoryService,
+    public dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {
     /* Saving user data in localstorage when
     logged in and setting up null when logged out */
@@ -34,6 +39,7 @@ export class AuthService {
       const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
       const album = userRef.valueChanges();
       let name: any,permissions: any,e;
+      this.isUser=true;
       this.emailVeried=user.emailVerified;
       album.subscribe(value => {
         name = value.usersName;
@@ -66,28 +72,44 @@ export class AuthService {
  }
   // Sign in with email/password
   SignIn(email: any, password: any) {
+    this.dialog.open(DialogElementsExampleDialog,{
+      maxWidth: '100vw',
+      width: '80%',
+      panelClass: 'full-screen-modal'
+      ,disableClose: true
+    });
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((result) => {
+        this.dialog.closeAll();
         this.ngZone.run(() => {
           this.router.navigate(['dashboard']);
         });
         this.SetUserData(result.user);
         this.userEmail.next(result.user?.email+'');
       }).catch((error) => {
-        window.alert(error.message)
+        this.dialog.closeAll();
+        this.openSnackBar(error.message,"Cancel")
       }) 
   }
 
   // Sign up with email/password
   SignUp(username:any, email:any, password:any) {
+    this.dialog.open(DialogElementsExampleDialog,{
+      maxWidth: '100vw',
+      width: '80%',
+      panelClass: 'full-screen-modal'
+      ,disableClose: true
+    });
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign
         up and returns promise */
+        this.dialog.closeAll();
         this.SendVerificationMail();
         this.SetUserData1(result.user,username);
       }).catch((error) => {
-        window.alert(error.message)
+        this.dialog.closeAll();
+        this.openSnackBar(error.message,"Cancel")
       })
   }
 
@@ -103,11 +125,18 @@ export class AuthService {
 
   // Reset Forggot password
   ForgotPassword(passwordResetEmail:any) {
+    this.dialog.open(DialogElementsExampleDialog,{
+      maxWidth: '100vw',
+      width: '80%',
+      panelClass: 'full-screen-modal'
+      ,disableClose: true
+    });
     return this.afAuth.auth.sendPasswordResetEmail(passwordResetEmail)
     .then(() => {
-      window.alert('Password reset email sent, check your inbox.');
+      this.openSnackBar('Password reset email sent, check your inbox.',"Cancel")
     }).catch((error) => {
-      window.alert(error)
+      this.dialog.closeAll();
+      this.openSnackBar(error.message,"Cancel")
     })
   }
 
@@ -117,6 +146,8 @@ export class AuthService {
     f=localStorage.getItem('user')
     const user = JSON.parse(localStorage.getItem('user') || '{}');
    // return (user !== null && user.emailVerified !== false) ? true : false;
+   
+   if(this.isUser === true && this.emailVeried === false){ window.alert("Email not verified!")}
    return (this.emailVeried === true) ? true : false;
   }
 
@@ -134,7 +165,7 @@ export class AuthService {
         })
       this.SetUserData(result.user);
     }).catch((error) => {
-      window.alert(error)
+      this.openSnackBar(error.message,"Cancel")
     })
   }
 
@@ -186,12 +217,29 @@ export class AuthService {
 
   // Sign out
   SignOut() {
+    this.dialog.open(DialogElementsExampleDialog,{
+      maxWidth: '100vw',
+      width: '80%',
+      panelClass: 'full-screen-modal'
+      ,disableClose: true
+    });
     return this.afAuth.auth.signOut().then(() => {
+      this.dialog.closeAll();
       localStorage.removeItem('user');
       this.userData=null
+      this.isUser = false
       this.emailVeried = false
       this.router.navigate(['sign-in']);
     })
   }
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action);
+  }
+ 
 
 }
+@Component({
+  selector: 'dialog-elements-example-dialog',
+  templateUrl: 'dialog-elements-example-dialog.html',
+})
+export class DialogElementsExampleDialog {}

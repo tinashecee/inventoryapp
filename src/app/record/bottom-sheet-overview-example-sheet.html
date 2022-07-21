@@ -1,7 +1,7 @@
 <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
     <mat-step [stepControl]="firstFormGroup">
       <form [formGroup]="firstFormGroup">
-        <ng-template matStepLabel>Recepient's name</ng-template>
+        <ng-template matStepLabel>Recepient's Name</ng-template>
         <mat-form-field appearance="fill">
           <mat-label>Full Name</mat-label>
           <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
@@ -13,10 +13,10 @@
     </mat-step>
     <mat-step [stepControl]="secondFormGroup">
         <form [formGroup]="secondFormGroup">
-          <ng-template matStepLabel>Recepient's ID</ng-template>
+          <ng-template matStepLabel>Recepient's Province</ng-template>
           <mat-form-field appearance="fill">
             <mat-label>ID #</mat-label>
-            <input matInput placeholder="45-4532343h67" formControlName="secondCtrl" required>
+            <input matInput placeholder="Midlands" formControlName="secondCtrl" required>
           </mat-form-field>
           <div>
             <button mat-button matStepperPrevious>Back</button>
@@ -26,7 +26,7 @@
       </mat-step>
     <mat-step [stepControl]="thirdFormGroup" optional>
       <form [formGroup]="thirdFormGroup">
-        <ng-template matStepLabel>Recepient's address</ng-template>
+        <ng-template matStepLabel>Recepient's Office</ng-template>
         <mat-form-field appearance="fill">
           <mat-label>Address</mat-label>
           <input matInput formControlName="thirdCtrl" placeholder="Ex. 1 Main St, New York, NY"

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Component, Injectable, NgZone } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
@@ -9,6 +9,7 @@ import { Item } from '../models/item';
 import { Allocation } from '../models/allocation';
 import { Record } from '../models/record';
 import { AuthService } from './auth.service';
+import {MatDialog} from '@angular/material/dialog';
 @Injectable({
   providedIn: 'root'
 })
@@ -33,7 +34,7 @@ export class InventoryService {
   allocations2 = this.allocations1.asObservable();
   public report1= new BehaviorSubject<Record[]>([]);
   report2 = this.report1.asObservable();
-  constructor(private firestore: AngularFirestore, private _snackBar: MatSnackBar, private authService:AuthService) { 
+  constructor(private firestore: AngularFirestore, private _snackBar: MatSnackBar, public dialog: MatDialog,private authService:AuthService) { 
     this.getCategories()
     this.getItems()
     this.getUnallocatedItems()
@@ -56,34 +57,54 @@ export class InventoryService {
             .add(data)
   }
   createCategory(data:any,nam:string) {
+    this.dialog.open(DialogElementsExampleDialo,{
+      maxWidth: '100vw',
+      width: '80%',
+      panelClass: 'full-screen-modal'
+      ,disableClose: true
+    });
     return new Promise<any>((resolve, reject) =>{
+      
         this.firestore
             .collection("item_category")
             .add(data)
             .then(res => {
+              this.dialog.closeAll()
               this.makeAreport('create category',nam)
               this.openSnackBar("Item Category Added","Cancel")})
-            .catch(err => {this.openSnackBar("Error Occured","Cancel")});
+            .catch(err => {
+              this.dialog.closeAll()
+              this.openSnackBar("Error Occured","Cancel")});
     });
 }
 addItem(data:any,nam:string) {
+  this.dialog.open(DialogElementsExampleDialo,{
+    maxWidth: '100vw',
+    width: '80%',
+    panelClass: 'full-screen-modal'
+    ,disableClose: true
+  });
   return new Promise<any>((resolve, reject) =>{
-      /*this.items2.subscribe(res=>{
-        let arry:Item[]=res
-        arry.forEach(element => {
-          if(d)
-        });
-      })*/
+    
       this.firestore
           .collection("it_inventory")
           .add(data)
           .then(res => {
+            this.dialog.closeAll();
             this.makeAreport('add item',nam)
             this.openSnackBar("Item Added","Cancel")})
-          .catch(err => {this.openSnackBar("Error Occured","Cancel")});
+          .catch(err => {
+            this.dialog.closeAll();
+            this.openSnackBar("Error Occured","Cancel")});
   });
 }
 allocateDevice(id:string,data:any,nam:string) {
+  this.dialog.open(DialogElementsExampleDialo,{
+    maxWidth: '100vw',
+    width: '80%',
+    panelClass: 'full-screen-modal'
+    ,disableClose: true
+  });
   return new Promise<any>((resolve, reject) =>{
     
       this.firestore
@@ -94,25 +115,35 @@ allocateDevice(id:string,data:any,nam:string) {
               status:"alloted",
               updatedAt:''+date
           }).then(res=>{
+            this.dialog.closeAll();
             this.makeAreport('allot item',nam)
             this.openSnackBar("Device Allocation was successful","Cancel")}) .catch(err => {this.openSnackBar("Error Occured","Cancel")});
             })
-          .catch(err => {this.openSnackBar("Error Occured","Cancel")});
+          .catch(err => {
+            this.dialog.closeAll();
+            this.openSnackBar("Error Occured","Cancel")});
   });
 }
 deleteCategory(data:string){
+  this.dialog.open(DialogElementsExampleDialo,{
+    maxWidth: '100vw',
+    width: '80%',
+    panelClass: 'full-screen-modal'
+    ,disableClose: true
+  });
   this.firestore.collection('/item_category', ref => ref.where('name', '==', data)).get()
   .subscribe((querySnapshot) => {
      querySnapshot.forEach((doc) => {
         doc.ref
            .delete()
            .then(() => {
+            this.dialog.closeAll();
              this.makeAreport('delete category',data)
             this.openSnackBar("Category successfully Deleted!","Cancel")
               console.log('Document successfully Deleted!');
            })
            .catch((error) => {
-          
+            this.dialog.closeAll();
               console.error('Error removing category: ', error);
               this.openSnackBar("Error removing category","Cancel")
            });
@@ -120,14 +151,21 @@ deleteCategory(data:string){
   });
 }
 deleteItem(id:string,nam:string){
+  this.dialog.open(DialogElementsExampleDialo,{
+    maxWidth: '100vw',
+    width: '80%',
+    panelClass: 'full-screen-modal'
+    ,disableClose: true
+  });
   this.firestore.collection(`it_inventory`).doc(id)
   .delete().then(() => {
+            this.dialog.closeAll();
             this.makeAreport('delete item',nam)
             this.openSnackBar("Item successfully Deleted!","Cancel")
               console.log('Item successfully Deleted!');
            })
            .catch((error) => {
-          
+            this.dialog.closeAll();
               console.error('Error removing item: ', error);
               this.openSnackBar("Error removing item","Cancel")
            });
@@ -135,6 +173,12 @@ deleteItem(id:string,nam:string){
   
 };
 updateItems(id:string,description:string,quantity:number,expiry:string){
+  this.dialog.open(DialogElementsExampleDialo,{
+    maxWidth: '100vw',
+    width: '80%',
+    panelClass: 'full-screen-modal'
+    ,disableClose: true
+  });
   let date: Date = new Date(); 
   this.firestore.doc<Item>(`it_inventory/${id}`).update({
     item_description:description,
@@ -142,12 +186,13 @@ updateItems(id:string,description:string,quantity:number,expiry:string){
     item_expiration:expiry,
     updatedAt:''+date
 }).then(() => {
+  this.dialog.closeAll();
   this.makeAreport('update item',description)
   this.openSnackBar("Item successfully Updated!","Cancel")
     console.log('Item successfully Updated!');
  })
  .catch((error) => {
-
+    this.dialog.closeAll();
     console.error('Error removing item: ', error);
     this.openSnackBar("Error removing item","Cancel")
  });
@@ -241,3 +286,8 @@ openSnackBar(message: string, action: string) {
   this._snackBar.open(message, action);
 }
 }
+@Component({
+  selector: 'dialog-elements-example-dialo',
+  templateUrl: 'dialog-elements-example-dialo.html',
+})
+export class DialogElementsExampleDialo {}

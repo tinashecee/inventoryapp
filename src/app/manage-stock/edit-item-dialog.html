@@ -17,8 +17,9 @@
     <form [formGroup]="editItemFormGroup3">
       <mat-form-field appearance="fill">
         <mat-label>Expiration</mat-label>
-       <input matInput type="number" formControlName="itemExpiryCtrl" placeholder=""
-                         required>
+       <input matInput  [matDatepicker]="pickerr" formControlName="itemExpiryCtrl" >
+                  <mat-datepicker-toggle matSuffix [for]="pickerr"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerr></mat-datepicker>
         </mat-form-field>
     </form>
 </mat-dialog-content>

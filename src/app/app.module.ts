@@ -40,6 +40,7 @@ import { ManageStockComponent } from './manage-stock/manage-stock.component';
 import { ListItemsComponent } from './list-items/list-items.component';
 import { AllocationsComponent } from './allocations/allocations.component';
 import { AuthService } from './services/auth.service';
+import { InventoryService } from './services/inventory.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import {MatDividerModule} from '@angular/material/divider';
 import { SignUpComponent } from './sign-up/sign-up.component';
@@ -47,6 +48,8 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { DialogElementsExampleDialog } from './services/auth.service';
+import { DialogElementsExampleDialo } from './services/inventory.service';
 import { AuthGuard } from './guard/auth.guard';
 @NgModule({
   declarations: [
@@ -60,6 +63,8 @@ import { AuthGuard } from './guard/auth.guard';
     DisplayComponent,
     ManageStockComponent,
     DialogContentExampleDialog,
+    DialogElementsExampleDialog,
+    DialogElementsExampleDialo,
     EditItemDialog,
     ListItemsComponent,
     BottomSheetOverviewExampleSheet,
@@ -110,7 +115,7 @@ import { AuthGuard } from './guard/auth.guard';
     MatSnackBarModule,
     MatDividerModule
   ],
-  providers: [{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3500}},AuthService,AuthGuard],
+  providers: [{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3500}},AuthService,InventoryService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

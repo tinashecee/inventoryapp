@@ -1,27 +1,29 @@
 <div class="example-container" class="" [class.example-is-mobile]="mobileQuery.matches" >
   <mat-toolbar color="default" class="example-toolbar mat-elevation-z8">
     <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
-    <h1 class="example-app-name">IT Inventory App</h1>
+    <h1 class="example-app-name">MLGPW Inventory App</h1>
   </mat-toolbar>
 
   <mat-sidenav-container class="example-sidenav-container" 
                          [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
     <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
-      <mat-nav-list>
+      <mat-nav-list *ngIf="authService.userData as user">
         <a mat-list-item routerLink="/dashboard" >Dashboard</a>
-        <a mat-list-item routerLink="/manage-stock" >Manage Inventory</a>
+        <a mat-list-item routerLink="/manage-stock"  [disabled]="user.permissions !== 'limited' && user.permissions !== 'unlimited'">Manage Inventory</a>
         <a mat-list-item routerLink="/list-items" >View Inventory</a>
-        <a mat-list-item routerLink="/record" >Record Allocation</a>
+        <a mat-list-item routerLink="/record" [disabled]="user.permissions !== 'unlimited'">Record Allocation</a>
         <a mat-list-item routerLink="/allocations" >View Item Allocations</a>
         <a mat-list-item routerLink="/report" >View Reports</a>
         <mat-divider></mat-divider>
-        <a *ngIf="authService.userData as user" mat-list-item (click)="authService.SignOut()" >Sign Out</a>
+        <a *ngIf="authService.emailVeried" mat-list-item (click)="authService.SignOut()" >Sign Out</a>
       </mat-nav-list>
     </mat-sidenav>
 
     <mat-sidenav-content>
       <router-outlet></router-outlet>
+      <div class="footer"><p>MLGPW Inventory App 2022</p></div>
     </mat-sidenav-content>
   </mat-sidenav-container>
+  
 </div>

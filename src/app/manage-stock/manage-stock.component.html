@@ -97,7 +97,7 @@
       <mat-action-list>
         <button mat-list-item *ngFor="let n of items"  (click)="openDialog1(n.id,n.item_name,n.item_description,n.item_quantity)">
               <mat-chip-list><mat-chip>{{n.item_quantity}}</mat-chip></mat-chip-list>
-            <p mat-line><span>{{n.item_description}}</span><span>{{n.item_serial_number}}</span> <mat-chip-list><mat-chip color="primary">{{n.item_name}}</mat-chip></mat-chip-list></p>
+            <p mat-line><span>{{n.item_description}}</span>[<span>{{n.item_serial_number}}</span>] <mat-chip-list><mat-chip color="primary">{{n.item_name}}</mat-chip></mat-chip-list></p>
             
           </button>
       </mat-action-list>

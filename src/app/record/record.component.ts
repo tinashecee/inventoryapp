@@ -31,9 +31,9 @@ export class RecordComponent implements OnInit,AfterViewInit {
       this.items=res;
       this.dataSource = new MatTableDataSource(this.items);
     }) }
-  openBottomSheet(id:string,a:string,b:string, c:string): void {
+  openBottomSheet(id:string,a:string,b:string, c:string, d:string): void {
     this._bottomSheet.open(BottomSheetOverviewExampleSheet, {
-      data: { id:id,device_name:a ,device_serial_number: b, item_expiration: c}});
+      data: { id:id,device_name:a ,device_serial_number: b, item_expiration: c, item_nmame: d}});
   }
   getIimeConverter(timestamp:any){
 
@@ -78,7 +78,7 @@ export class BottomSheetOverviewExampleSheet {
   fourthFormGroup!: FormGroup;
   fifthFormGroup!: FormGroup;
   isLinear = true;
-  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: {id:string,device_name: string,device_serial_number:string, item_expiration:string},private _bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>,private _formBuilder: FormBuilder, private inventoryService: InventoryService) {
+  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: {id:string,device_name: string,device_serial_number:string, item_expiration:string, item_name},private _bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>,private _formBuilder: FormBuilder, private inventoryService: InventoryService) {
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
@@ -105,11 +105,12 @@ export class BottomSheetOverviewExampleSheet {
     let date: Date = new Date(); 
     let data = {
       recepient_name:this.firstFormGroup.get('firstCtrl')?.value,
-      recepient_id:this.secondFormGroup.get('secondCtrl')?.value,
-      recepient_address:this.thirdFormGroup.get('thirdCtrl')?.value,
+      recepient_province:this.secondFormGroup.get('secondCtrl')?.value,
+      recepient_office:this.thirdFormGroup.get('thirdCtrl')?.value,
       recepient_department:this.fourthFormGroup.get('fourthCtrl')?.value,
       recepient_position:this.fifthFormGroup.get('fifthCtrl')?.value,
       device_name:this.data.device_name,
+      device_type:this.data.item_name,
       item_expiration:this.data.item_expiration,
       device_serial_number:this.data.device_serial_number,
       allocationDate:date

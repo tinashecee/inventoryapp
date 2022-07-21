@@ -51,7 +51,7 @@ export class ManageStockComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogContentExampleDialog , {
       data: {
         name:name
-      }});
+      }}); 
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
