@@ -18,6 +18,7 @@ export class RecordComponent implements OnInit,AfterViewInit {
   isEditable = false;
   displayedColumns: string[] = ['Device_Type', 'Name', 'Serial_#', 'Status','Recorded_Date'];
   dataSource: MatTableDataSource<Item> | any;
+  clickedRows = new Set<Item>();
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
@@ -33,7 +34,7 @@ export class RecordComponent implements OnInit,AfterViewInit {
     }) }
   openBottomSheet(id:string,a:string,b:string, c:string, d:string): void {
     this._bottomSheet.open(BottomSheetOverviewExampleSheet, {
-      data: { id:id,device_name:a ,device_serial_number: b, item_expiration: c, item_nmame: d}});
+      data: { id:id,device_name:a ,device_serial_number: b, item_expiration: c, item_name: d}});
   }
   getIimeConverter(timestamp:any){
 
@@ -78,7 +79,7 @@ export class BottomSheetOverviewExampleSheet {
   fourthFormGroup!: FormGroup;
   fifthFormGroup!: FormGroup;
   isLinear = true;
-  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: {id:string,device_name: string,device_serial_number:string, item_expiration:string, item_name},private _bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>,private _formBuilder: FormBuilder, private inventoryService: InventoryService) {
+  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: {id:string,device_name: string,device_serial_number:string, item_expiration:string, item_name:string},private _bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>,private _formBuilder: FormBuilder, private inventoryService: InventoryService) {
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
