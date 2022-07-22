@@ -1,3 +1,17 @@
+<mat-chip-list >
+  <mat-chip>
+    <mat-icon>devices</mat-icon>
+    {{data.item_name}}
+  </mat-chip>
+  <mat-chip color="primary">
+    <mat-icon>important_devices</mat-icon>
+    {{data.device_name}}
+  </mat-chip>
+  <mat-chip color="accent">
+    <mat-icon>fingerprint</mat-icon>
+   {{data.device_serial_number}}
+  </mat-chip>
+</mat-chip-list>
 <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
     <mat-step [stepControl]="firstFormGroup">
       <form [formGroup]="firstFormGroup">
