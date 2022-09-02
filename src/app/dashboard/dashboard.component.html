@@ -44,13 +44,13 @@
        <div class="container">
         <p >Total number of items <strong>currently</strong> in stock.</p>
         <br>
-        <p style="font-size:10em;text-align: center;">{{count}}</p>
+        <p style="font-size:5em;text-align: center;">{{count}}</p>
        
     </div>
     </mat-grid-tile> 
     <mat-grid-tile rowHeight="500"  style="overflow-y: scroll;">
       
-      <mat-list style="width:100%;padding-top:150px">
+      <mat-list style="width:100%;position: relative;top: 100px;">
         <mat-list-item *ngFor="let m of data1">
           <mat-chip-list><span></span>
           <mat-chip color="primary" *ngIf="m.percentage > 0" selected>{{m.percentage}}</mat-chip><mat-chip *ngIf="m.percentage === 0" >{{m.percentage}}</mat-chip></mat-chip-list>

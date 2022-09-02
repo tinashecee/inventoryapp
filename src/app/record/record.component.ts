@@ -16,25 +16,35 @@ export class RecordComponent implements OnInit,AfterViewInit {
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
   isEditable = false;
-  displayedColumns: string[] = ['Device_Type', 'Name', 'Serial_#', 'Status','Recorded_Date'];
+  displayedColumns: string[] = ['Asset_Type', 'Name', 'Serial_#', 'Status','Recorded_Date'];
   dataSource: MatTableDataSource<Item> | any;
+
+  displayedColumns1: string[] = ['Consumable_Type', 'Name', 'Serial_#', 'Quantity','Recorded_Date'];
+  dataSource1: MatTableDataSource<Item> | any;
   clickedRows = new Set<Item>();
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort = new MatSort;
+  items1:Item[] | any;
   items:Item[] | any;
   constructor(private _formBuilder: FormBuilder, private _bottomSheet: MatBottomSheet, private inventoryService: InventoryService) {
 
     //this.route.params.subscribe( params => console.log(params) );
     this.inventoryService.getSubjectUnallocatedItems().subscribe(res=>{
       this.items=res;
+
       this.dataSource = new MatTableDataSource(this.items);
-    }) }
-  openBottomSheet(id:string,a:string,b:string, c:string, d:string): void {
+    })
+    this.inventoryService.getSubjectUnallocatedConsumables().subscribe(res=>{
+      this.items1=res;
+      this.dataSource1 = new MatTableDataSource(this.items1);
+    }) 
+   }
+  openBottomSheet(id:string,a:string,b:string, c:string, d:string, e:number): void {
     this._bottomSheet.open(BottomSheetOverviewExampleSheet, {
-      data: { id:id,device_name:a ,device_serial_number: b, item_expiration: c, item_name: d}});
+      data: { id:id,device_name:a ,device_serial_number: b, item_expiration: c, item_name: d, item_quantity:e}});
   }
   getIimeConverter(timestamp:any){
 
@@ -67,6 +77,14 @@ export class RecordComponent implements OnInit,AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
+  applyFilter1(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource1.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource1.paginator.firstPage();
+    }
+  }
 }
 @Component({
   selector: 'bottom-sheet-overview-example-sheet',
@@ -78,8 +96,9 @@ export class BottomSheetOverviewExampleSheet {
   thirdFormGroup!: FormGroup;
   fourthFormGroup!: FormGroup;
   fifthFormGroup!: FormGroup;
+  sixthFormGroup!: FormGroup;
   isLinear = true;
-  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: {id:string,device_name: string,device_serial_number:string, item_expiration:string, item_name:string},private _bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>,private _formBuilder: FormBuilder, private inventoryService: InventoryService) {
+  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: {id:string,device_name: string,device_serial_number:string, item_expiration:string, item_name:string, item_quantity:number},private _bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>,private _formBuilder: FormBuilder, private inventoryService: InventoryService) {
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]
     });
@@ -94,6 +113,9 @@ export class BottomSheetOverviewExampleSheet {
     });
     this.fifthFormGroup = this._formBuilder.group({
       fifthCtrl: ['', Validators.required]
+    });
+    this.sixthFormGroup = this._formBuilder.group({
+      sixthCtrl: ['', Validators.required]
     });
   }
 
@@ -110,6 +132,7 @@ export class BottomSheetOverviewExampleSheet {
       recepient_office:this.thirdFormGroup.get('thirdCtrl')?.value,
       recepient_department:this.fourthFormGroup.get('fourthCtrl')?.value,
       recepient_position:this.fifthFormGroup.get('fifthCtrl')?.value,
+      quantity:this.sixthFormGroup.get('sixthCtrl')?.value,
       device_name:this.data.device_name,
       device_type:this.data.item_name,
       item_expiration:this.data.item_expiration,
@@ -117,7 +140,11 @@ export class BottomSheetOverviewExampleSheet {
       allocationDate:date
 
     }
-    
-    this.inventoryService.allocateDevice(this.data.id,data,this.firstFormGroup.get('firstCtrl')?.value+" "+this.data.device_serial_number)
+    if(this.data.item_quantity<this.sixthFormGroup.get('sixthCtrl')?.value){
+      this.inventoryService.openSnackBar("Invalid Amount! Alloted more items that available","Cancel")
+    }else{
+      let g=this.data.item_quantity - this.sixthFormGroup.get('sixthCtrl')?.value
+    this.inventoryService.allocateDevice(this.data.id,data,this.firstFormGroup.get('firstCtrl')?.value+" "+this.data.device_serial_number,g)
   }
+}
 }

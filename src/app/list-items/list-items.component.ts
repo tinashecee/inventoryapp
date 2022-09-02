@@ -15,20 +15,46 @@ import * as html2pdf from 'html2pdf.js'
 export class ListItemsComponent implements  AfterViewInit {
 
 
-  displayedColumns: string[] = ['Device_Type', 'Name', 'Serial_#', 'Status', 'Expiration' ,'Recorded_Date'];
+  displayedColumns: string[] = ['Device_Type', 'Name', 'Serial_#', 'Status', 'Expiration', 'Quantity', 'Supplier' , 'Price','Recorded_Date'];
+  displayedColumns1: string[] = ['Device_Type', 'Name', 'Serial_#', 'Expiration', 'Quantity', 'Supplier' , 'Price','Recorded_Date'];
+  
   dataSource: MatTableDataSource<Item> | any;
+  dataSource1: MatTableDataSource<Item> | any;
+  dataSource2: MatTableDataSource<Item> | any;
+  dataSource3: MatTableDataSource<Item> | any;
 
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
+  paginator1!: MatPaginator;
+  paginator2!: MatPaginator;
+  paginator3!: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort = new MatSort;
+  sort1: MatSort = new MatSort;
+  sort2: MatSort = new MatSort;
+  sort3: MatSort = new MatSort;
   items:Item[] | any;
+  items1:Item[] | any;
+  items2:Item[] | any;
+  items3:Item[] | any;
   constructor(private route: ActivatedRoute, private inventoryService: InventoryService) {
 
     //this.route.params.subscribe( params => console.log(params) );
-    this.inventoryService.getSubjectItems().subscribe(res=>{
+    this.inventoryService.getSubjectUnallocatedItems().subscribe(res=>{
       this.items=res;
       this.dataSource = new MatTableDataSource(this.items);
+    }) 
+    this.inventoryService.getSubjectUnallocatedConsumables().subscribe(res=>{
+      this.items1=res;
+      this.dataSource1 = new MatTableDataSource(this.items1);
+    }) 
+    this.inventoryService.getSubjectAllocatedItems().subscribe(res=>{
+      this.items2=res;
+      this.dataSource2 = new MatTableDataSource(this.items2);
+    }) 
+    this.inventoryService.getSubjectAllocatedConsumables().subscribe(res=>{
+      this.items3=res;
+      this.dataSource3 = new MatTableDataSource(this.items3);
     }) 
     // Assign the data to the data source for the table to render
    
@@ -50,6 +76,15 @@ export class ListItemsComponent implements  AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+
+    this.dataSource1.paginator1 = this.paginator1;
+    this.dataSource1.sort1 = this.sort1;
+
+    this.dataSource2.paginator2 = this.paginator2;
+    this.dataSource2.sort2 = this.sort2;
+
+    this.dataSource3.paginator = this.paginator3;
+    this.dataSource3.sort = this.sort3;
   }
 
   applyFilter(event: Event) {
@@ -58,6 +93,30 @@ export class ListItemsComponent implements  AfterViewInit {
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
+    }
+  }
+  applyFilter1(event: Event) {
+    const filterValue1 = (event.target as HTMLInputElement).value;
+    this.dataSource1.filter = filterValue1.trim().toLowerCase();
+
+    if (this.dataSource1.paginator1) {
+      this.dataSource1.paginator1.firstPage();
+    }
+  }
+  applyFilter2(event: Event) {
+    const filterValue2 = (event.target as HTMLInputElement).value;
+    this.dataSource2.filter = filterValue2.trim().toLowerCase();
+
+    if (this.dataSource2.paginator) {
+      this.dataSource2.paginator2.firstPage();
+    }
+  }
+  applyFilter3(event: Event) {
+    const filterValue3 = (event.target as HTMLInputElement).value;
+    this.dataSource3.filter = filterValue3.trim().toLowerCase();
+
+    if (this.dataSource3.paginator3) {
+      this.dataSource3.paginator3.firstPage();
     }
   }
   download(){

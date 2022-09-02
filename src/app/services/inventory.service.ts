@@ -20,6 +20,8 @@ export class InventoryService {
   items:Observable<Item[]> | undefined;
   itemsCollectiona: AngularFirestoreCollection<Item> | undefined;
   itemsa:Observable<Item[]> | undefined;
+  itemsCollectionb: AngularFirestoreCollection<Item> | undefined;
+  itemsb:Observable<Item[]> | undefined;
   reportCollection: AngularFirestoreCollection<Record> | undefined;
   report:Observable<Record[]> | undefined;
   allocationCollection: AngularFirestoreCollection<Allocation> | undefined;
@@ -30,6 +32,12 @@ export class InventoryService {
   items2 = this.items1.asObservable();
   public items1a= new BehaviorSubject<Item[]>([]);
   items2a = this.items1a.asObservable();
+  public items1b= new BehaviorSubject<Item[]>([]);
+  items2b = this.items1b.asObservable();
+  public items1c= new BehaviorSubject<Item[]>([]);
+  items2c = this.items1c.asObservable();
+  public items1d= new BehaviorSubject<Item[]>([]);
+  items2d = this.items1d.asObservable();
   public allocations1= new BehaviorSubject<Allocation[]>([]);
   allocations2 = this.allocations1.asObservable();
   public report1= new BehaviorSubject<Record[]>([]);
@@ -38,6 +46,7 @@ export class InventoryService {
     this.getCategories()
     this.getItems()
     this.getUnallocatedItems()
+    this.getUnallocatedConsumable()
     this.getAllocations()
     this.getReport()
   }
@@ -98,7 +107,7 @@ addItem(data:any,nam:string) {
             this.openSnackBar("Error Occured","Cancel")});
   });
 }
-allocateDevice(id:string,data:any,nam:string) {
+allocateDevice(id:string,data:any,nam:string,g:number) {
   this.dialog.open(DialogElementsExampleDialo,{
     maxWidth: '100vw',
     width: '80%',
@@ -106,15 +115,16 @@ allocateDevice(id:string,data:any,nam:string) {
     ,disableClose: true
   });
   return new Promise<any>((resolve, reject) =>{
-    
+    if(g==0){
       this.firestore
-          .collection("allocations")
+          .collection("allocations")  
           .add(data)
           .then(res => {
             
             let date: Date = new Date(); 
             this.firestore.doc<Item>(`it_inventory/${id}`).update({
               status:"alloted",
+              item_quantity:g,
               updatedAt:''+date
           }
           
@@ -126,6 +136,28 @@ allocateDevice(id:string,data:any,nam:string) {
           .catch(err => {
             this.dialog.closeAll();
             this.openSnackBar("Error Occured","Cancel")});
+          }else{
+
+            this.firestore
+          .collection("allocations")  
+          .add(data)
+          .then(res => {
+            
+            let date: Date = new Date(); 
+            this.firestore.doc<Item>(`it_inventory/${id}`).update({
+              item_quantity:g,
+              updatedAt:''+date
+          }
+          
+          ).then(res=>{
+            this.dialog.closeAll();
+            this.makeAreport('allot item',nam)
+            this.openSnackBar("Device Allocation was successful","Cancel")}) .catch(err => {this.dialog.closeAll();this.openSnackBar("Error Occured","Cancel")});
+            })
+          .catch(err => {
+            this.dialog.closeAll();
+            this.openSnackBar("Error Occured","Cancel")});
+          }
   });
 }
 deleteCategory(data:string){
@@ -244,7 +276,7 @@ getItems() {
   })
 }
 getUnallocatedItems() { 
-  this.itemsCollectiona = this.firestore.collection('it_inventory', ref => ref.where('status', '!=', 'alloted'));
+  this.itemsCollectiona = this.firestore.collection('it_inventory', ref => ref.where('status', '!=', 'alloted').where('item_type', '==', 'asset'));
   this.itemsa = this.itemsCollectiona.snapshotChanges().pipe(map(changes =>{
     return changes.map(a =>{
       const data = a.payload.doc.data() as Item;
@@ -255,6 +287,48 @@ getUnallocatedItems() {
   this.itemsa.subscribe(res=>{
     let data = res
     this.items1a.next(data);
+  })
+}
+getUnallocatedConsumable() { 
+  this.itemsCollectionb = this.firestore.collection('it_inventory', ref => ref.where('item_quantity', '>=', 0).where('item_type', '==', 'consumable'));
+  this.itemsb = this.itemsCollectionb.snapshotChanges().pipe(map(changes =>{
+    return changes.map(a =>{
+      const data = a.payload.doc.data() as Item;
+      data.id = a.payload.doc.id;
+      return data;
+    });
+  }));
+  this.itemsb.subscribe(res=>{
+    let data = res
+    this.items1b.next(data);
+  })
+}
+getAllocatedItems() { 
+  this.itemsCollectiona = this.firestore.collection('it_inventory', ref => ref.where('status', '==', 'alloted').where('item_type', '==', 'asset'));
+  this.itemsa = this.itemsCollectiona.snapshotChanges().pipe(map(changes =>{
+    return changes.map(a =>{
+      const data = a.payload.doc.data() as Item;
+      data.id = a.payload.doc.id;
+      return data;
+    });
+  }));
+  this.itemsa.subscribe(res=>{
+    let data = res
+    this.items1c.next(data);
+  })
+}
+getAllocatedConsumable() { 
+  this.itemsCollectionb = this.firestore.collection('it_inventory', ref => ref.where('item_quantity', '==', 0).where('item_type', '==', 'consumable'));
+  this.itemsb = this.itemsCollectionb.snapshotChanges().pipe(map(changes =>{
+    return changes.map(a =>{
+      const data = a.payload.doc.data() as Item;
+      data.id = a.payload.doc.id;
+      return data;
+    });
+  }));
+  this.itemsb.subscribe(res=>{
+    let data = res
+    this.items1d.next(data);
   })
 }
 getAllocations() { 
@@ -282,6 +356,15 @@ getSubjectItems(){
 }
 getSubjectUnallocatedItems(){
   return this.items2a;
+}
+getSubjectUnallocatedConsumables(){
+  return this.items2b;
+}
+getSubjectAllocatedItems(){
+  return this.items2c;
+}
+getSubjectAllocatedConsumables(){
+  return this.items2d;
 }
 getSubjectAllocations(){
   return this.allocations2;

@@ -13,7 +13,7 @@ import * as html2pdf from 'html2pdf.js'
   styleUrls: ['./report.component.scss']
 })
 export class ReportComponent implements OnInit,AfterViewInit {
-  displayedColumns: string[] = ['Name', 'ID', 'Department', 'Position','Type','Device','Serial_#','Allocation_Date','Expiration'];
+  displayedColumns: string[] = ['Name', 'ID', 'Department', 'Position','Type','Device','Quantity','Serial_#','Allocation_Date','Expiration'];
   dataSource: MatTableDataSource<Allocation> | any;
   allocations:Allocation[] | any;
   @ViewChild(MatPaginator)

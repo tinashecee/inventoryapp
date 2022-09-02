@@ -29,6 +29,8 @@ export class ManageStockComponent implements OnInit {
   thirdFormGroup!: FormGroup;
   fourthFormGroup!: FormGroup;
   fifthFormGroup!: FormGroup;
+  sixthFormGroup!: FormGroup;
+  seventhFormGroup!: FormGroup;
   firstFormGroup1!: FormGroup;
   secondFormGroup1!: FormGroup;
   thirdFormGroup1!: FormGroup;
@@ -37,9 +39,8 @@ export class ManageStockComponent implements OnInit {
   filterValue:any;
   typesOfShoes: string[] = ['Boots', 'Clogs', 'Loafers', 'Moccasins', 'Sneakers'];
   categoryType: Cat[] = [
-    {value: 'network', viewValue: 'Network'},
-    {value: 'software', viewValue: 'Software'},
-    {value: 'hardware', viewValue: 'Hardware'},
+    {value: 'asset', viewValue: 'Asset'},
+    {value: 'consumable', viewValue: 'Consumable'},
   ];
   myControl = new FormControl('d');
   options: Category[] = [];
@@ -89,6 +90,12 @@ export class ManageStockComponent implements OnInit {
     this.fifthFormGroup = this._formBuilder.group({
       fifthCtrl: ['', Validators.required]
     });
+    this.sixthFormGroup = this._formBuilder.group({
+      sixthCtrl: ['', Validators.required]
+    });
+    this.seventhFormGroup = this._formBuilder.group({
+      seventhCtrl: ['', Validators.required]
+    });
     this.firstFormGroup1 = this._formBuilder.group({
       firstCtrl1: ['', Validators.required]
     });
@@ -105,7 +112,7 @@ export class ManageStockComponent implements OnInit {
       map(value => (typeof value === 'string' ? value : value.name)),
       map(name => (name ? this._filter(name) : this.options.slice())),
     );
-  }
+  } 
   isDisabled(){
     if(this.filterValue != null && this.filterValue != ""){
        return false;
@@ -132,15 +139,18 @@ export class ManageStockComponent implements OnInit {
   addItem(){
     let dat: Date = new Date(); 
     let data = { 
-      item_name:this.filterValue,
+      item_name:this.firstFormGroup.get('firstCtrl')?.value.name,
+      item_type:this.firstFormGroup.get('firstCtrl')?.value.type,
       item_serial_number:this.secondFormGroup.get('secondCtrl')?.value,
       item_description:this.thirdFormGroup.get('thirdCtrl')?.value,
       item_expiration:this.fourthFormGroup.get('fourthCtrl')?.value,
       item_quantity:this.fifthFormGroup.get('fifthCtrl')?.value,
+      item_supplier:this.sixthFormGroup.get('sixthCtrl')?.value,
+      item_price:this.seventhFormGroup.get('seventhCtrl')?.value,
       status:"available",
       createdAt:dat
     }
-   this.inventoryService.addItem(data,this.thirdFormGroup.get('thirdCtrl')?.value)
+    this.inventoryService.addItem(data,this.thirdFormGroup.get('thirdCtrl')?.value)
   }
   getSubjectCategories(){
     this.inventoryService.getSubjectCategories().subscribe( res =>{

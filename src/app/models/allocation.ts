@@ -8,6 +8,7 @@ interface Allocation{
     recepient_office?:string;
     recepient_position?:string;
     allocationDate?:string;
+    quantity?:string;
     device_name?:string;
     device_type?:string;
     device_serial_number?:string;
