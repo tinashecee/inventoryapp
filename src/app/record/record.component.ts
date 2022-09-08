@@ -6,6 +6,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { InventoryService } from '../services/inventory.service';
 import { Item } from '../models/item';
+
 @Component({
   selector: 'app-record',
   templateUrl: './record.component.html',
@@ -63,6 +64,7 @@ export class RecordComponent implements OnInit,AfterViewInit {
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required],
     });
+    
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -144,7 +146,8 @@ export class BottomSheetOverviewExampleSheet {
       this.inventoryService.openSnackBar("Invalid Amount! Alloted more items that available","Cancel")
     }else{
       let g=this.data.item_quantity - this.sixthFormGroup.get('sixthCtrl')?.value
-    this.inventoryService.allocateDevice(this.data.id,data,this.firstFormGroup.get('firstCtrl')?.value+" "+this.data.device_serial_number,g)
+    this.inventoryService.allocateDevice(this.data.id,data,this.firstFormGroup.get('firstCtrl')?.value+" "+this.data.device_serial_number,g,this.sixthFormGroup.get('sixthCtrl')?.value)
   }
 }
+
 }

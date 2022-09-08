@@ -1,6 +1,6 @@
 <p>
   <mat-toolbar color="primary">
-    <span>Task Report</span>
+    <span>Reports</span>
   </mat-toolbar>
 </p>
 <mat-form-field appearance="standard">
@@ -9,7 +9,7 @@
 </mat-form-field>
 
 <div class="mat-elevation-z8">
-  <table  id="table" mat-table [dataSource]="dataSource" matSort>
+  <table  id="table" mat-table [dataSource]="dataSource" multiTemplateDataRows matSort>
 
     <!-- ID Column -->
     <ng-container matColumnDef="User">
@@ -49,3 +49,4 @@
   
   <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 </div>
+

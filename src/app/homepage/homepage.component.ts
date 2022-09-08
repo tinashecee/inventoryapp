@@ -6,6 +6,7 @@ import { Record } from '../models/record';
 import { InventoryService } from '../services/inventory.service';
 import * as html2pdf from 'html2pdf.js'
 
+
 @Component({
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
@@ -21,6 +22,7 @@ export class HomepageComponent implements OnInit,AfterViewInit {
   sort: MatSort = new MatSort;
   operations:Record[] | any
   ngOnInit(): void {
+    
   }
 
   constructor(private inventoryService: InventoryService) {
@@ -68,4 +70,5 @@ var opt = {
 // New Promise-based usage:
 html2pdf().from(element).set(opt).save();
   }
+  
 }

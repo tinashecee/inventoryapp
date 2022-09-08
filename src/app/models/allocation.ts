@@ -7,7 +7,7 @@ interface Allocation{
     recepient_department?:string;
     recepient_office?:string;
     recepient_position?:string;
-    allocationDate?:string;
+    allocationDate?:Date;
     quantity?:string;
     device_name?:string;
     device_type?:string;

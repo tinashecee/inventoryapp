@@ -38,6 +38,11 @@ loadChildren: () => import('./record/record-routing.module').then(m => m.RecordR
 loadChildren: () => import('./report/report-routing.module').then(m => m.ReportRoutingModule)
 },
 {
+  path: 'statistics',
+  canActivate: [AuthGuard],
+loadChildren: () => import('./allocations/allocations-routing.module').then(m => m.AllocationsRoutingModule)
+},
+{
   path: 'display',
    canActivate: [AuthGuard],
 loadChildren: () => import('./display/display-routing.module').then(m => m.DisplayRoutingModule)

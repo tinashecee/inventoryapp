@@ -79,7 +79,7 @@ export class InventoryService {
             .add(data)
             .then(res => {
               this.dialog.closeAll()
-              this.makeAreport('create category',nam)
+              this.makeAreport('create category',data.toString())
               this.openSnackBar("Item Category Added","Cancel")})
             .catch(err => {
               this.dialog.closeAll()
@@ -100,14 +100,14 @@ addItem(data:any,nam:string) {
           .add(data)
           .then(res => {
             this.dialog.closeAll();
-            this.makeAreport('add item',nam)
+            this.makeAreport('add item',nam+"/"+data.item_serial_number)
             this.openSnackBar("Item Added","Cancel")})
           .catch(err => {
             this.dialog.closeAll();
             this.openSnackBar("Error Occured","Cancel")});
   });
 }
-allocateDevice(id:string,data:any,nam:string,g:number) {
+allocateDevice(id:string,data:any,nam:string,g:number,q:number) {
   this.dialog.open(DialogElementsExampleDialo,{
     maxWidth: '100vw',
     width: '80%',
@@ -129,9 +129,24 @@ allocateDevice(id:string,data:any,nam:string,g:number) {
           }
           
           ).then(res=>{
+            let run = true
+            const querySnapshot =   this.firestore.collection('item_category', ref => ref.where('name', '==', data.device_type));
+            querySnapshot.snapshotChanges().pipe(
+              map(actions => actions.map(a => {   
+                const data = a.payload.doc.data() as Category;
+                data.id = a.payload.doc.id;
+                return data;
+              }))).subscribe((_doc: any) => {
+               let quantity = _doc[0].quantity_allocated + q
+               console.log(quantity)
+               if(run == true){
+               this.firestore.doc(`item_category/${_doc[0].id}`).update({quantity_allocated: quantity})
+               run = false
+               }
+              }) 
             this.dialog.closeAll();
-            this.makeAreport('allot item',nam)
-            this.openSnackBar("Device Allocation was successful","Cancel")}) .catch(err => {this.dialog.closeAll();this.openSnackBar("Error Occured","Cancel")});
+            this.makeAreport('allot item',nam+"/"+data.item_serial_number)
+            this.openSnackBar("Item Allocation was successful","Cancel")}) .catch(err => {this.dialog.closeAll();this.openSnackBar("Error Occured","Cancel")});
             })
           .catch(err => {
             this.dialog.closeAll();
@@ -150,8 +165,23 @@ allocateDevice(id:string,data:any,nam:string,g:number) {
           }
           
           ).then(res=>{
+            let run = true
+            const querySnapshot =   this.firestore.collection('item_category', ref => ref.where('name', '==', data.device_type));
+            querySnapshot.snapshotChanges().pipe(
+              map(actions => actions.map(a => {   
+                const data = a.payload.doc.data() as Category;
+                data.id = a.payload.doc.id;
+                return data;
+              }))).subscribe((_doc: any) => {
+               let quantity = _doc[0].quantity_allocated + q
+               console.log(quantity)
+               if(run == true){
+               this.firestore.doc(`item_category/${_doc[0].id}`).update({quantity_allocated: quantity})
+               run = false
+               }
+              }) 
             this.dialog.closeAll();
-            this.makeAreport('allot item',nam)
+            this.makeAreport('allot item',nam+"/"+data.item_serial_number)
             this.openSnackBar("Device Allocation was successful","Cancel")}) .catch(err => {this.dialog.closeAll();this.openSnackBar("Error Occured","Cancel")});
             })
           .catch(err => {

@@ -133,6 +133,7 @@ export class ManageStockComponent implements OnInit {
       name:this.firstFormGroup1.get('firstCtrl1')?.value,
       description:this.secondFormGroup1.get('secondCtrl1')?.value,
       type:this.thirdFormGroup1.get('thirdCtrl1')?.value,
+      quantity_allocated:0
     }
     this.inventoryService.createCategory(data,this.firstFormGroup1.get('firstCtrl1')?.value);  
   }

@@ -51,6 +51,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { DialogElementsExampleDialog } from './services/auth.service';
 import { DialogElementsExampleDialo } from './services/inventory.service';
 import { AuthGuard } from './guard/auth.guard';
+import { NgChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [
     AppComponent,
@@ -98,9 +99,10 @@ import { AuthGuard } from './guard/auth.guard';
     MatDatepickerModule,
     MatNativeDateModule ,
     MatPaginatorModule,
+    NgChartsModule,
     AngularFireModule.initializeApp({
       apiKey: "AIzaSyCM8D_fEU_T8ieaXLEjFtknvcYxkweSM-o",
-      authDomain: "itmlgpw-inventory.firebaseapp.com",
+      authDomain: "itmlgpw-inventory.firebaseapp.com", 
       projectId: "itmlgpw-inventory",
       storageBucket: "itmlgpw-inventory.appspot.com",
       messagingSenderId: "626175535227",
